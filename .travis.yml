@@ -9,7 +9,7 @@ python:
 
 install:
   - pip install pipenv codecov --upgrade
-  - pipenv install
+  - pipenv install --dev
 
 script:
   - pytest --cov=./
