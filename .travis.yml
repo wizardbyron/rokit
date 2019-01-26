@@ -8,8 +8,9 @@ python:
 # command to install dependencies
 
 install:
-  - pip install pipenv --upgrade
+  - pip install pipenv codecov --upgrade
   - pipenv install
 
 script:
-  - pytest
+  - pytest --cov=./
+  - codecov --token=$CODECOV_TOKEN
