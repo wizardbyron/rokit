@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import codecs
 import os
-import sys
 from rokit.__version__ import __version__
 
 from setuptools import find_packages, setup
