@@ -6,11 +6,12 @@ name = "pypi"
 [packages]
 requests = "*"
 click = "*"
+future = "*"
 
 [dev-packages]
 pytest = "*"
+pytest-cov = "*"
 mock = "*"
 pylint = "*"
 autopep8 = "*"
 twine = "*"
-pytest-cov = "*"

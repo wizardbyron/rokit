@@ -7,7 +7,7 @@ python:
 
 install:
   - pip install pipenv codecov --upgrade
-  - pipenv install --dev --python --skip-lock
+  - pipenv install --skip-lock --dev
 
 script:
   - pytest --cov=./
