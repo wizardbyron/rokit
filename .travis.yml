@@ -11,7 +11,7 @@ python:
 
 install:
   - pip install pipenv --upgrade
-  - pipenv install --dev
+  - pipenv install
 
 script:
   - pytest
