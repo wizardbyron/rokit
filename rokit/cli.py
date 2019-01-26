@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 import click
 import requests
-import os
 import sys
 from .__version__ import __version__
 from .util import pass_tag, fail_tag, highlight

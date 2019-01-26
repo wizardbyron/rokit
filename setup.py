@@ -12,22 +12,6 @@ here = os.path.abspath(os.path.dirname(__file__))
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = "\n" + f.read()
 
-if sys.argv[-1] == "install":
-    os.system("pip install pipenv && pipenv install")
-    sys.exit()
-
-if sys.argv[-1] == "build":
-    os.system("rm -rf ./dist/* && python setup.py clean sdist bdist_wheel")
-    sys.exit()
-
-if sys.argv[-1] == "pre-release":
-    os.system("twine upload --repository-url https://test.pypi.org/legacy/ dist/*")
-    sys.exit()
-
-if sys.argv[-1] == "release":
-    os.system("twine upload dist/*")
-    sys.exit()
-
 setup(
     name="rokit",
     packages=find_packages(),
