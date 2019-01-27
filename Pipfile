@@ -5,7 +5,13 @@ name = "pypi"
 
 [packages]
 requests = "*"
+click = "*"
+future = "*"
 
 [dev-packages]
-rope = "*"
-"autopep8" = "*"
+pytest = "*"
+pytest-cov = "*"
+mock = "*"
+pylint = "*"
+autopep8 = "*"
+twine = "*"

@@ -1,0 +1,14 @@
+language: python
+python:
+  - "2.7"
+  - "3.6"
+  - "3.7-dev"
+# command to install dependencies
+
+install:
+  - pip install pipenv codecov --upgrade
+  - pipenv install --skip-lock --dev
+
+script:
+  - pytest --cov=./
+  - codecov --token=$CODECOV_TOKEN
