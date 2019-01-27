@@ -55,9 +55,12 @@ def cli_url(origin_url, expect_url):
         origin_url] + highlight_redirect_chain(parse_redirect_chain(response), expect_url)
     print_redirect_chain(redirect_chain)
     if expect_url != None:
-        found = highlight(expect_url) in redirect_chain
+        url_found = highlight(expect_url) in redirect_chain
         result_msg = ' Request to %s will %s redirect to %s' % (
-            origin_url, '' if found else 'not', expect_url)
-        click.echo(pass_tag(result_msg)) if found else click.echo(
-            fail_tag(result_msg))
-        sys.exit(1) if not found else sys.exit()
+            origin_url, '' if url_found else 'not', expect_url)
+        if url_found:
+            click.echo(pass_tag(result_msg))
+            sys.exit()
+        else:
+            click.echo(fail_tag(result_msg))
+            sys.exit(1)
