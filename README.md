@@ -9,7 +9,7 @@
 
 **Rokit** (Redirection Optimization Kit) is a CLI tool to help wed admin/developer to test or optimize URL redirection. It's easy to integrate into your CI as smoke test and regression test for redirection testing.
 
-![Usage](docs/images/usage.svg)
+![Usage](./docs/images/usage.svg)<img src="./docs/images/usage.svg">
 
 ## Installation
 
