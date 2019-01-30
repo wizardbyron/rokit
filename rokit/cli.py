@@ -38,7 +38,19 @@ def argument_valid(origin_url, expect_url):
               callback=print_version,
               expose_value=False,
               is_eager=True,
-              help='Show the version of rokit')
+              help='Show the version of rokit.')
+@click.option('--file', '-f',
+              is_flag=True,
+              callback=print_version,
+              expose_value=False,
+              is_eager=True,
+              help='Load test cases from csv file.')
+@click.option('--proc-num', '-p',
+              is_flag=True,
+              callback=print_version,
+              expose_value=False,
+              is_eager=True,
+              help='Number of process, only for load csv file.')
 @click.argument('origin_url', required=False)
 @click.argument('expect_url', required=False)
 @click.pass_context

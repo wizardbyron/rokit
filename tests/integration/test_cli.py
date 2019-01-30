@@ -60,3 +60,8 @@ def test_pair_url_should_not_pass():
     assert result.exit_code == 1
     assert 'Redirect 2 time(s): http://www.github.com -> https://www.github.com/ -> https://github.com/' in  result.output
     assert '[FAIL] Request to http://www.github.com will not redirect to https://www.github.com/wizardbyron'
+
+def test_load_csv_cases():
+    runner = CliRunner()
+    result = runner.invoke(cli, ['-f','test_file/example.csv'])
+    assert result.exit_code == 0
