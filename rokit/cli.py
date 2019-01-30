@@ -2,8 +2,10 @@ from __future__ import absolute_import
 import click
 import requests
 import sys
+import csv
 from .__version__ import __version__
-from .util import pass_tag, fail_tag, highlight
+from .util import pass_tag, fail_tag, highlight, is_valid_url
+
 
 def print_version(ctx, param, value):
     if not value or ctx.resilient_parsing:
@@ -12,16 +14,16 @@ def print_version(ctx, param, value):
     ctx.exit()
 
 
-def highlight_matched_url(origin_url, expect_url):
-    return highlight(origin_url) if origin_url == expect_url else origin_url
+def highlight_matched_url(source, target):
+    return highlight(source) if source == target else source
 
 
 def parse_redirect_chain(response):
     return list(map(lambda item: item.headers['Location'], response.history))
 
 
-def highlight_redirect_chain(redirect_chain, expect_url):
-    return list(map(lambda item: highlight_matched_url(item, expect_url), redirect_chain))
+def highlight_redirect_chain(redirect_chain, target):
+    return list(map(lambda item: highlight_matched_url(item, target), redirect_chain))
 
 
 def print_redirect_chain(redirect_chain):
@@ -29,8 +31,18 @@ def print_redirect_chain(redirect_chain):
                (len(redirect_chain)-1, ' -> '.join(redirect_chain)))
 
 
-def argument_valid(origin_url, expect_url):
-    return origin_url is not None or expect_url is not None
+def is_argument_valid(source, target):
+    return is_valid_url(source) or is_valid_url(target)
+
+
+def cli_file(file):
+    is_pass = True
+    with open(file) as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            is_pass = is_pass and cli_url(quote(row[0]), quote(row[1]))
+    return is_pass
+
 
 @click.command()
 @click.option('--version', '-v',
@@ -39,40 +51,36 @@ def argument_valid(origin_url, expect_url):
               expose_value=False,
               is_eager=True,
               help='Show the version of rokit.')
-@click.option('--file', '-f',
-              is_flag=True,
-              callback=print_version,
-              expose_value=False,
-              is_eager=True,
-              help='Load test cases from csv file.')
-@click.option('--proc-num', '-p',
-              is_flag=True,
-              callback=print_version,
-              expose_value=False,
-              is_eager=True,
-              help='Number of process, only for load csv file.')
-@click.argument('origin_url', required=False)
-@click.argument('expect_url', required=False)
+@click.argument('source', required=False)
+@click.argument('target', required=False)
 @click.pass_context
-def cli(ctx, origin_url, expect_url):
-    if argument_valid(origin_url, expect_url):
-        cli_url(origin_url, expect_url)
+def cli(ctx, source, target):
+    is_pass = True
+    if is_argument_valid(source, target):
+        is_pass = cli_url(source, target)
+    elif source is not None:
+        is_pass = cli_file(source)
     else:
         click.echo(ctx.get_help())
+    click.echo('%s' % is_pass)
+    sys.exit() if is_pass else sys.exit(1)
 
 
-def cli_url(origin_url, expect_url):
-    response = requests.get(origin_url)
-    redirect_chain = [
-        origin_url] + highlight_redirect_chain(parse_redirect_chain(response), expect_url)
-    print_redirect_chain(redirect_chain)
-    if expect_url != None:
-        url_found = highlight(expect_url) in redirect_chain
+def cli_url(source, target):
+    is_found = True
+    response = requests.get(source)
+    redirect_chain = parse_redirect_chain(response)
+    redirect_chain_highlighted = [source] + \
+        highlight_redirect_chain(redirect_chain, target)
+    print_redirect_chain(redirect_chain_highlighted)
+    if target != None:
+        is_url_found = highlight(target) in redirect_chain_highlighted
         result_msg = ' Request to %s will %s redirect to %s' % (
-            origin_url, '' if url_found else 'not', expect_url)
-        if url_found:
+            source, '' if is_url_found else 'not', target)
+        if is_url_found:
             click.echo(pass_tag(result_msg))
-            sys.exit()
+            is_found = True
         else:
             click.echo(fail_tag(result_msg))
-            sys.exit(1)
+            is_found = False
+    return is_found
