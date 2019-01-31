@@ -1,7 +1,6 @@
-from urllib.parse import urlparse, quote
 from future.standard_library import install_aliases
 install_aliases()
-
+from urllib.parse import urlparse
 
 def pass_tag(message):
     return '[\033[32mPASS\033[0m]%s' % message

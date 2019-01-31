@@ -11,6 +11,7 @@ future = "*"
 [dev-packages]
 pytest = "<5"
 pytest-cov = "*"
+codecov = "*"
 mock = "*"
 pylint = "*"
 autopep8 = "*"
