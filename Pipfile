@@ -9,7 +9,7 @@ click = "*"
 future = "*"
 
 [dev-packages]
-pytest = "*"
+pytest = "<5"
 pytest-cov = "*"
 mock = "*"
 pylint = "*"
