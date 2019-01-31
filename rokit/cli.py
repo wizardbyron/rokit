@@ -40,7 +40,7 @@ def cli_file(file):
     with open(file) as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
-            is_pass = is_pass and cli_url(quote(row[0]), quote(row[1]))
+            is_pass = is_pass and cli_url(row[0].strip(), row[1].strip())
     return is_pass
 
 
